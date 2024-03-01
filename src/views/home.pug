@@ -5,5 +5,10 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Document
     body 
-        h1 it works!
+        header 
+            h1 it works!
+        main
+            form(id="textForm")
+                input(id="message" type="text", placeholder="write message")
+                button(id="msgBtn" type="button" ) Send
         script(src="/public/js/app.js")

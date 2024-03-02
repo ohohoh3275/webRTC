@@ -13,12 +13,16 @@ app.get("/*", (req, res) => res.redirect("/"));
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+const sockets = [];
+
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   socket.send("hi client! how are you?");
   socket.on("close", () => console.log("disconnected from browser"));
   socket.on("message", (msg) => {
     console.log(msg, "server");
-    socket.send(msg);
+    // socket.send(msg);
+    sockets.forEach((aSocket) => aSocket.send(msg));
   });
 });
 

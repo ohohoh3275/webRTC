@@ -2,9 +2,12 @@
 // https://developer.mozilla.org/ko/docs/Web/API/WebSocket
 const socket = new WebSocket(`ws://${window.location.host}`);
 
-// const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("#textForm");
-const submitButton = document.querySelector("#msgBtn");
+const nicknameForm = document.querySelector("#nicknameForm");
+const messageForm = document.querySelector("#messageForm");
+const messageBtn = document.querySelector("#messageBtn");
+const nicknameBtn = document.querySelector("#nicknameBtn");
+
+const messageList = document.querySelector("ul");
 
 socket.addEventListener("open", () => {
   console.log("connected to browser : ws");
@@ -12,30 +15,32 @@ socket.addEventListener("open", () => {
 
 socket.addEventListener("message", (message) => {
   console.log(">>> message: ", message.data, " from the Server");
+  const li = document.createElement("li");
+  li.innerText = message.data;
+  messageList.append(li);
 });
 
 socket.addEventListener("close", () => {
   console.log("close connection from server");
 });
 
-// setTimeout(() => {
-//   socket.send("good! how are you?");
-// }, 100000);
+setTimeout(() => {
+  socket.send("good! how are you?");
+}, 2000);
 
 // issue: after sumbitting, it reloaded.
-// messageForm.addEventListener("submit", (e) => {
-//   e.preventDefault;
-//   const input = document.querySelector("input");
-//   console.log("new message", input.value);
-//   socket.send(input.value);
-//   input.value = "";
-// });
-
-// it works with button tho
-submitButton.addEventListener("click", (e) => {
-  e.preventDefault;
-  const input = document.querySelector("input");
+messageForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  // i tried with e.preventDefault; not e.preventDefault();
+  // so it didnt really work, and issue i wrote above did come up
+  const input = document.querySelector("input#message");
   console.log("new message", input.value);
   socket.send(input.value);
   input.value = "";
+});
+
+nicknameForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const input = document.querySelector("input#nickname");
+  socket.send(input.value);
 });

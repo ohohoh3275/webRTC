@@ -9,6 +9,11 @@ const nicknameBtn = document.querySelector("#nicknameBtn");
 
 const messageList = document.querySelector("ul");
 
+function makeMessage(type, payload) {
+  const msg = { type, payload };
+  return JSON.stringify(msg);
+}
+
 socket.addEventListener("open", () => {
   console.log("connected to browser : ws");
 });
@@ -35,12 +40,12 @@ messageForm.addEventListener("submit", (e) => {
   // so it didnt really work, and issue i wrote above did come up
   const input = document.querySelector("input#message");
   console.log("new message", input.value);
-  socket.send(input.value);
+  socket.send(makeMessage("new_msaage", input.value));
   input.value = "";
 });
 
 nicknameForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const input = document.querySelector("input#nickname");
-  socket.send(input.value);
+  socket.send(makeMessage("nickname", input.value));
 });

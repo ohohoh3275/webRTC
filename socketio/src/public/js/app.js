@@ -23,7 +23,7 @@ function addMessage(message) {
 welcomeForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const input = document.querySelector("#welcomeInput");
-    socket.emit("enter_room", input.value, renderChatRoom(input.value));
+    socket.emit("enter_room", input.value, renderChatRoom);
     input.value = "";
 })
 

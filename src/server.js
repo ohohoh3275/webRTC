@@ -17,12 +17,25 @@ const sockets = [];
 
 wss.on("connection", (socket) => {
   sockets.push(socket);
-  socket.send("hi client! how are you?");
-  socket.on("close", () => console.log("disconnected from browser"));
+
+  socket["nickname"] = "anonymous";
+
+  console.log("Connected");
+
+  socket.on("close", () => {
+    console.log("closed ws connection");
+  });
+
   socket.on("message", (msg) => {
-    console.log(msg, "server");
-    // socket.send(msg);
-    sockets.forEach((aSocket) => aSocket.send(msg));
+    const message = JSON.parse(msg);
+    switch (message.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket.nickname}: ${message.payload}`)
+        );
+      case "nickname":
+        socket["nickname"] = message.payload;
+    }
   });
 });
 

@@ -10,7 +10,12 @@ html(lang="en")
         main
             div#welcome
                 form
-                    input(required type="text", placeholder="room name")
+                    input#welcomeInput(required type="text", placeholder="room name")
                     button Enter Room
+            div#chatRoom(style="display:none")
+                ul
+                form
+                    input#chatRoomInput(required type="text", placeholder="write text to everyone")
+                    button Send 
         script(src="/socket.io/socket.io.js") 
         script(src="/public/js/app.js")

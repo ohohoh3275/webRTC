@@ -18,13 +18,10 @@ wsServer.on("connection", (socket) => {
     socket.onAny((e) => {
         console.log(`event: ${e}`)
     })
-    socket.on("enter_room", (roomName, fn) => {
-        console.log(socket.rooms) // Set(1) { '63Cv7p_U6i1QiJB4AAAB' }
+    socket.on("enter_room", (roomName, newRoom) => {
         socket.join(roomName)
-        console.log(socket.rooms) // Set(2) { '63Cv7p_U6i1QiJB4AAAB', 'aaa' }
-        setTimeout(() => {
-            fn("it's done!"); // sent from browser and running on browser too
-        }, 3000);
+        newRoom();
+        socket.to(roomName).emit("welcome")
     })
 })
 

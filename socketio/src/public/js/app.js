@@ -1,16 +1,32 @@
 const socket = io();
 
-const welcome = document.querySelector("#welcome")
-const form = document.querySelector("form")
+const welcomeDiv = document.querySelector("#welcome")
+const welcomeForm = document.querySelector("#welcome > form")
+const chatRoomDiv = document.querySelector("#chatRoom");
+const chatRoomForm = document.querySelector("#chatRoom > form")
+const chatList = document.querySelector("#chatRoom > ul")
 
-function sendToServer(text) {
-    console.log(`server said : "${text}"`)
+function renderChatRoom(roomName) {
+    welcomeDiv.style.display = "none";
+    chatRoomDiv.style.display = "block"
+    const roomTitle = document.createElement('h2')
+    roomTitle.innerText = `Room name: ${roomName}`;
+    chatRoomDiv.appendChild(roomTitle)
 }
 
-form.addEventListener("submit", (e) => {
+function addMessage(message) {
+    const li = document.createElement("li");
+    li.innerText = message;
+    chatList.append(li);
+}
+
+welcomeForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const input = document.querySelector("input");
-    // custom event name: enter_room
-    socket.emit("enter_room", input.value, sendToServer);
+    const input = document.querySelector("#welcomeInput");
+    socket.emit("enter_room", input.value, renderChatRoom(input.value));
     input.value = "";
+})
+
+socket.on("welcome", () => {
+    addMessage("someone joined!")
 })

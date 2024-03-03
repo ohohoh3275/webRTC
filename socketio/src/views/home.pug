@@ -1,0 +1,18 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Document
+    body 
+        header 
+            h1 socket io
+        main
+            form#nicknameForm
+                input(id="nickname", type="text", placeholder="write nickname")
+                button Submit
+            ul
+            form#messageForm
+                input(id="message" type="text", placeholder="write message")
+                button#messageBtn Send
+        script(src="/public/js/app.js")

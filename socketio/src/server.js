@@ -1,5 +1,6 @@
 import express from "express";
 import http from "http";
+import SocketIO from "socket.io";
 
 const app = express();
 
@@ -10,6 +11,16 @@ app.use("/public", express.static(__dirname + "/public"));
 app.get("/", (req, res) => res.render("home"));
 app.get("/*", (req, res) => res.redirect("/"));
 
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
 
-server.listen(3000, () => console.log(`listening on 3000`));
+wsServer.on("connection", (socket) => {
+    socket.on("enter_room", (msg, fn) => {
+        console.log(msg)
+        setTimeout(() => {
+           fn(); // sent from browser and running on browser too
+        }, 3000);
+    })
+})
+
+httpServer.listen(3000, () => console.log(`listening on 3000`));

@@ -20,6 +20,7 @@ socket.addEventListener("open", () => {
 
 // issue: when server send back the messages that client sent,
 // the code below cannot append elements nor even be triggered
+// fixed: it just was a typo
 socket.addEventListener("message", (message) => {
   console.log("message received")
   const li = document.createElement("li");
@@ -45,7 +46,7 @@ messageForm.addEventListener("submit", (e) => {
   // so it didnt really work, and issue i wrote above did come up
   const input = document.querySelector("input#message");
   console.log("input.value", input.value);
-  socket.send(makeMessage("new_msaage", input.value));
+  socket.send(makeMessage("new_message", input.value));
   input.value = "";
 });
 

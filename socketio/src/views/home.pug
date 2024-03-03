@@ -8,11 +8,8 @@ html(lang="en")
         header 
             h1 socket io
         main
-            form#nicknameForm
-                input(id="nickname", type="text", placeholder="write nickname")
-                button Submit
-            ul
-            form#messageForm
-                input(id="message" type="text", placeholder="write message")
-                button#messageBtn Send
+            div#welcome
+                form
+                    input(required type="text", placeholder="room name")
+                    button Enter Room
         script(src="/public/js/app.js")

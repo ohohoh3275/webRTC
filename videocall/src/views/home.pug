@@ -8,11 +8,16 @@ html(lang="en")
         header
             h1 video call
         main
-            div#myStream
-                video#myFace(autoplay, playsinline, width="400", height="400")
-                button#mute Mute
-                button#camera CameraOff
-                select#cameraSelect 
-                    option select camera
+            div#welcome
+                form
+                    input(placeholder="room name")
+                    button(type="submit") submit
+            div#call 
+                div#myStream
+                    video#myFace(autoplay, playsinline, width="400", height="400")
+                    button#mute Mute
+                    button#camera CameraOff
+                    select#cameraSelect 
+                        option select camera
         script(src="/socket.io/socket.io.js") 
         script(src="/public/js/app.js")

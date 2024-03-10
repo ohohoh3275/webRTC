@@ -124,9 +124,21 @@ socket.on("answer", (answer) => {
     myPeerConnection.setRemoteDescription(answer);
 })
 
+socket.on("ice", (ice) => {
+    console.log('receive candidate')
+    myPeerConnection.addIceCandidate(ice);
+})
+
 // RTC 
 function makeConnection() {
     myPeerConnection = new RTCPeerConnection();
+    
+    // ICE candidate
+    myPeerConnection.addEventListener("icecandidate", (data) => {
+        console.log('sent candidate')
+        socket.emit("ice", data.candidate, roomName);
+    })
+    
     // my stream (video and voice) goes to peer connection
     myStream.getTracks().forEach((track) => {
         myPeerConnection.addTrack(track, myStream);

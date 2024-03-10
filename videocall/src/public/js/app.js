@@ -13,6 +13,7 @@ let myStream;
 let isMuted = false;
 let isCameraOff = false;
 let roomName = "";
+let myPeerConnection;
 
 async function getCameras() {
     
@@ -81,10 +82,11 @@ cameraOffBtn.addEventListener("click", () => {
 const welcome = document.getElementById("welcome");
 const welcomeForm = welcome.querySelector("form");
 
-function startMedia() {
+async function startMedia() {
     welcome.hidden = true;
     call.hidden = false;
-    getMedia();
+    await getMedia();
+    await makeConnection();
 }
 
 welcomeForm.addEventListener("submit", (e) => {
@@ -95,10 +97,26 @@ welcomeForm.addEventListener("submit", (e) => {
     input.value = "";
 })
 
-
-
 // socket code
-
-socket.on("welcome", () => {
+socket.on("welcome", async () => {
+    // this code runs only for `first` of the chatroom
     console.log("someone joined")
+    const offer = await myPeerConnection.createOffer();
+    myPeerConnection.setLocalDescription(offer);
+    console.log('send offer', offer);
+    socket.emit("offer", offer, roomName)
 })
+
+socket.on("offer", (offer) => {
+    // this code runs only for `second` of the chatroom
+    console.log('receive offer', offer);
+})
+
+// RTC 
+function makeConnection() {
+    myPeerConnection = new RTCPeerConnection();
+    // my stream (video and voice) goes to peer connection
+    myStream.getTracks().forEach((track) => {
+        myPeerConnection.addTrack(track, myStream);
+    })
+}

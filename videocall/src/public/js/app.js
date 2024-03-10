@@ -138,6 +138,12 @@ function makeConnection() {
         console.log('sent candidate')
         socket.emit("ice", data.candidate, roomName);
     })
+
+    // add stream
+    myPeerConnection.addEventListener("addstream", (data) => {
+        const peersStream = document.getElementById("peersStream")
+        peersStream.srcObject = data.stream
+    })
     
     // my stream (video and voice) goes to peer connection
     myStream.getTracks().forEach((track) => {

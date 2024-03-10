@@ -36,14 +36,13 @@ async function getCameras() {
 }
 
 async function getMedia() {
-    
     try {
         myStream = await navigator.mediaDevices.getUserMedia({
             audio: true,
             video: true
         });
-        myFace.srcObject = myStream
-        getCameras();
+        myFace.srcObject = await myStream
+        await getCameras();
     } catch(e) {
         console.log(e)
     }
@@ -89,15 +88,20 @@ async function startMedia() {
     await makeConnection();
 }
 
-welcomeForm.addEventListener("submit", (e) => {
+welcomeForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const input = welcomeForm.querySelector("input");
-    socket.emit("join_room", input.value, startMedia);
+    const input = await welcomeForm.querySelector("input");
+    await startMedia();
+    await socket.emit("join_room", input.value);
     roomName = input.value;
     input.value = "";
 })
 
 // socket code
+// client: welcome && send offer -> server: welcome && receive offer 
+// -> server: send offer to roomName 
+// -> client: receive offer from roomName && send answer to roomName && set remote and local description
+// -> server: receive answer from roomName && send answer -> client: recieve answer && set remote description
 socket.on("welcome", async () => {
     // this code runs only for `first` of the chatroom
     console.log("someone joined")
@@ -107,9 +111,17 @@ socket.on("welcome", async () => {
     socket.emit("offer", offer, roomName)
 })
 
-socket.on("offer", (offer) => {
+socket.on("offer", async (offer) => {
     // this code runs only for `second` of the chatroom
     console.log('receive offer', offer);
+    await myPeerConnection.setRemoteDescription(offer);
+    const answer = await myPeerConnection.createAnswer();
+    await myPeerConnection.setLocalDescription(answer);
+    await socket.emit("answer", answer, roomName)
+})
+
+socket.on("answer", (answer) => { 
+    myPeerConnection.setRemoteDescription(answer);
 })
 
 // RTC 

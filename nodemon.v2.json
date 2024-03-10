@@ -1,0 +1,4 @@
+{
+  "ignore": ["socketio/src/public/*"],
+  "exec": "babel-node socketio/src/server.js"
+}

@@ -1,4 +1,4 @@
 {
-    "ignore": ["socketio/src/public/*"],
-    "exec": "babel-node socketio/src/server.js"
+    "ignore": ["videocall/src/public/*"],
+    "exec": "babel-node videocall/src/server.js"
   }
